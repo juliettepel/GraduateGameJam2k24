@@ -1,0 +1,4 @@
+repository "GraduateGameJam2k24@Juliette0430@cloud"
+  path "/"
+    br "/main"
+    co "/main"
