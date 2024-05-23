@@ -6,6 +6,9 @@ public class InteractionManager : Singleton<InteractionManager>
 {
     public List<Interactable> m_Interactables = new List<Interactable>();
 
+    public InteractableType StationInteractableType;
+    public InteractableType IngredientInteractableType;
+
     public void AddInteractable(Interactable interactable)
     {
         m_Interactables.Add(interactable);

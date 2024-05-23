@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Interactable : MonoBehaviour
 {
+    public InteractableType InteractableType { get; set; }
+    
     [SerializeField] private float m_InteractionRadius = 1.0f;
     Color defaultColor;
     Color targetColor;

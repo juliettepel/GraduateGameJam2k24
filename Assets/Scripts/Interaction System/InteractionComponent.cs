@@ -36,9 +36,8 @@ public class InteractionComponent : MonoBehaviour
 
                     if (bestTarget != null)
                     {
-
+                        Debug.Log("Interaction radius");
                     }
-                    bestTarget = interactable;
                 }
             }
         }
