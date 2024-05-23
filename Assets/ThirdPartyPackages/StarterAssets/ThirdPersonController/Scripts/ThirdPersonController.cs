@@ -105,6 +105,7 @@ namespace StarterAssets
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
+        private InteractionComponent _InteractionComponent;
 
         private const float _threshold = 0.01f;
 
@@ -139,6 +140,7 @@ namespace StarterAssets
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
+            _InteractionComponent = GetComponent<InteractionComponent>();
 #if ENABLE_INPUT_SYSTEM 
             _playerInput = GetComponent<PlayerInput>();
 #else
@@ -164,9 +166,10 @@ namespace StarterAssets
 
         private void UpdateInteraction()
         {
-            if (_input)
+            if (_input.interact)
             {
-
+                Debug.Log("[Controller] - Interacted");
+                _InteractionComponent.Interact();
             }
         }
 

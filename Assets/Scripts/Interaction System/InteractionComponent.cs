@@ -28,8 +28,10 @@ public class InteractionComponent : MonoBehaviour
                         interactable.OnInteractionAvailable();
                         _canInteract = true;
                     }
-
-                    _canInteract = false;
+                    else
+                    {
+                        _canInteract = false;
+                    }
 
                     if (bestTarget != null)
                     {
@@ -41,7 +43,7 @@ public class InteractionComponent : MonoBehaviour
         }
     }
 
-    void Interact()
+    public void Interact()
     {
         if(bestTarget == null)
         {
@@ -52,7 +54,7 @@ public class InteractionComponent : MonoBehaviour
         if(_canInteract)
         {
             //Interact here when a button is pressed
-
+            Debug.Log("[Interaction Component] - Interact");
         }
     }
 }
