@@ -5,6 +5,8 @@ using UnityEngine;
 public class Interactable : MonoBehaviour
 {
     [SerializeField] private float m_InteractionRadius = 1.0f;
+    Color defaultColor;
+    Color targetColor;
 
     public float GetInteractionRadius()
     {
@@ -15,11 +17,36 @@ public class Interactable : MonoBehaviour
     void Start()
     {
         InteractionManager.Instance.AddInteractable(this);
+
+
+        MeshRenderer cubeRenderer = GetComponent<MeshRenderer>();
+        if(cubeRenderer)
+        {
+            defaultColor = cubeRenderer.material.color;
+            targetColor = new Color(defaultColor.r / 2, defaultColor.g / 2, defaultColor.b / 2, 0.5f);
+        }
+    }
+
+    public void Reset()
+    {
+        MeshRenderer cubeRenderer = GetComponent<MeshRenderer>();
+        if (cubeRenderer)
+        {
+            cubeRenderer.material.color = defaultColor;
+        }
     }
 
     public void OnInteractionAvailable()
     {
         //Display a feedback here
         Debug.Log("[Interactable] - OnInteraction");
+
+        MeshRenderer cubeRenderer = GetComponent<MeshRenderer>();
+        if (cubeRenderer)
+        {
+            Debug.Log(Mathf.PingPong(Time.time, 1.0f));
+            Color c = Color.Lerp(defaultColor, targetColor, Mathf.PingPong(Time.time, 1.0f));
+            cubeRenderer.material.color = c;
+        }
     }
 }

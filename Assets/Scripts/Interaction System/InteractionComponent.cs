@@ -17,8 +17,8 @@ public class InteractionComponent : MonoBehaviour
         {
             if(interactable != null)
             {
-                Vector3 posAnimal = interactable.transform.position;
-                float tempDistance = Vector3.Distance(posAnimal, position);
+                Vector3 pos = interactable.transform.position;
+                float tempDistance = Vector3.Distance(pos, position);
 
                 if (tempDistance < distance)
                 {
@@ -30,6 +30,7 @@ public class InteractionComponent : MonoBehaviour
                     }
                     else
                     {
+                        interactable.Reset();
                         _canInteract = false;
                     }
 
