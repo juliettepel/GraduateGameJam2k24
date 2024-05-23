@@ -5,13 +5,17 @@ using UnityEngine;
 public class InteractionComponent : MonoBehaviour
 {
     public Interactable bestTarget = null;
-
     private bool _canInteract = false;
 
     void Update()
     {
         float distance = Mathf.Infinity;
         Vector3 position = transform.position;
+
+        if(InteractionManager.Instance.m_Interactables.Count == 0)
+        {
+            return;
+        }
 
         foreach (Interactable interactable in InteractionManager.Instance.m_Interactables)
         {

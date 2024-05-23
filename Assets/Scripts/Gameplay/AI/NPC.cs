@@ -11,7 +11,7 @@ public class NPC : MonoBehaviour
     public Vector3 CurrentDestination { get; set; }
 
     private NavMeshAgent _navMeshAgent;
-    private List<Interactable> _interactables;
+    private List<Interactable> _interactables = new List<Interactable>();
 
     private int _currentInteractableIndex = 0;
 
@@ -28,6 +28,10 @@ public class NPC : MonoBehaviour
 
     public Interactable GetNext()
     {
+    if(_currentInteractableIndex >= _interactables.Count)
+    {
+            return DummyCurrentTarget;
+    }
         var interactable = _interactables[_currentInteractableIndex];
         _currentInteractableIndex = (_currentInteractableIndex + 1) % _interactables.Count;
         return interactable;

@@ -16,10 +16,9 @@ public class Interactable : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         InteractionManager.Instance.AddInteractable(this);
-
 
         MeshRenderer cubeRenderer = GetComponent<MeshRenderer>();
         if(cubeRenderer)
@@ -43,12 +42,12 @@ public class Interactable : MonoBehaviour
         //Display a feedback here
         Debug.Log("[Interactable] - OnInteraction");
 
-        MeshRenderer cubeRenderer = GetComponent<MeshRenderer>();
-        if (cubeRenderer)
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        if (meshRenderer)
         {
-            Debug.Log(Mathf.PingPong(Time.time, 1.0f));
+            //Debug.Log(Mathf.PingPong(Time.time, 1.0f));
             Color c = Color.Lerp(defaultColor, targetColor, Mathf.PingPong(Time.time, 1.0f));
-            cubeRenderer.material.color = c;
+            meshRenderer.material.color = c;
         }
     }
 }

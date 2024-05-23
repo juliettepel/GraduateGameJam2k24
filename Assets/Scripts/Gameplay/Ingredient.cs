@@ -14,8 +14,10 @@ public class Ingredient : Interactable
     private GameObject _owner;
 
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
+        base.Start();
+
         InteractableType = InteractionManager.Instance.IngredientInteractableType;
 
         CurrentIngredientStageIndex = IngredientStages.FindIndex(elem => elem.Equals(CurrentIngredientStage));
