@@ -10,10 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7a54f35e2704f4e4dbdc9ad8e4a61064, type: 3}
-  m_Name: CarryIngredient
+  m_Name: PickingUpIngredient
   m_EditorClassIdentifier: 
-  Action:
+  Action: []
+  OnEnterStateActions:
   - {fileID: 11400000, guid: 340892311bd6400438ad1c8732b8042c, type: 2}
-  - {fileID: 11400000, guid: b653bbfdc913e0f40a9a6cdd96c9b95a, type: 2}
+  OnExitStateActions: []
   Transitions:
-  - {fileID: 11400000, guid: 46c8cbbc86f4df446aad4998555c9706, type: 2}
+  - {fileID: 11400000, guid: 0a75d0f9e5289994c9e27d5666794684, type: 2}

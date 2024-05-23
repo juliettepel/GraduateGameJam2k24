@@ -31,11 +31,14 @@ public class InteractionComponent : MonoBehaviour
                     {
                         interactable.OnInteractionAvailable();
                         _canInteract = true;
+                        bestTarget = interactable;
+
                     }
                     else
                     {
                         interactable.Reset();
                         _canInteract = false;
+                        bestTarget = null;
                     }
 
                     if (bestTarget != null)

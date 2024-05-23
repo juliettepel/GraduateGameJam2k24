@@ -9,7 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0339634374028a642803aeeda1fa10b0, type: 3}
-  m_Name: GoToIngredientAction
+  m_Script: {fileID: 11500000, guid: 49c4f5074e835814bb821da046df8337, type: 3}
+  m_Name: GoToIngredient
   m_EditorClassIdentifier: 
-  InteractableType: {fileID: 11400000, guid: 4fd215cb56d72d6458c777d47c0de222, type: 2}

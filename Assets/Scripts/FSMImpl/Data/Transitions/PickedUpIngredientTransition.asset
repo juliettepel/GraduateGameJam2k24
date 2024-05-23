@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b19fd8c349dbddd458cad13d2d0d2507, type: 3}
-  m_Name: Reached Ingredient Transition
+  m_Name: PickedUpIngredientTransition
   m_EditorClassIdentifier: 
-  Decision: {fileID: 11400000, guid: 7bd6e5f5407ee994f8d34293a9e32af1, type: 2}
-  TrueState: {fileID: 11400000, guid: f63d5d4920b926a46bd804e6995c1507, type: 2}
-  FalseState: {fileID: 11400000, guid: f2f30beddf2874b43b4581fd8ad502ca, type: 2}
+  Decision: {fileID: 11400000, guid: 1e6d5a07e18d8854a92428fb6d2b463f, type: 2}
+  TrueState: {fileID: 11400000, guid: 419da776e55a5944b934bf0e9d36b9da, type: 2}
+  FalseState: {fileID: 11400000, guid: f63d5d4920b926a46bd804e6995c1507, type: 2}

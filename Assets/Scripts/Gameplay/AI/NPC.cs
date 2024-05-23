@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Xml.Linq;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,18 +15,23 @@ public class NPC : MonoBehaviour
 
     private NavMeshAgent _navMeshAgent;
     private List<Interactable> _interactables = new List<Interactable>();
+    private Inventory _inventory;
 
     private int _currentInteractableIndex = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        CurrentTarget = DummyCurrentTarget;
-        CurrentDestination = CurrentTarget.transform.position;
-
         Debug.Log("START CALLED");
         _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
         _interactables = InteractionManager.Instance.m_Interactables;
+
+        if (_currentInteractableIndex == 0)
+        {
+            _navMeshAgent.SetDestination(_interactables[0].transform.position);
+        }
+
+        _inventory = gameObject.GetComponent<Inventory>();
     }
 
     public Interactable GetNext()
@@ -56,5 +64,77 @@ public class NPC : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+    }
+
+    //For now just use the nearest, if we have time we could choose it based on which recipe goes next.
+    public Ingredient ChooseIngredientToPickup()
+    {
+        Ingredient closestObj = null;
+        float closestObjDist = Mathf.Infinity; //Arbitrarily large number to start off
+
+        Vector3 currentPos = gameObject.transform.position;
+
+        foreach (Interactable interactable in InteractionManager.Instance.m_Interactables) 
+        {
+            if (interactable.InteractableType.Equals(InteractionManager.Instance.IngredientInteractableType)) 
+            {
+                Vector3 objectPos = interactable.gameObject.transform.position;
+
+                float objectDist = (objectPos - currentPos).magnitude;
+                if(objectDist < closestObjDist) 
+                {
+                    closestObjDist = objectDist;
+                    closestObj = (Ingredient)interactable;
+                }
+            }
+        }
+
+        if (closestObj != null) 
+        {
+            Debug.LogFormat("INGREDIENT {0} IS CLOSEST", closestObj.gameObject.name);
+            return closestObj.GetComponent<Ingredient>();
+        }
+
+        Debug.LogWarning("No ingredient found");
+        return null;
+    }
+
+
+    //Get the closest station that corresponds to the IngredientStage of the ingredient we're holding
+    public Station ChooseStationToGoTo()
+    {
+        Station closestObj = null;
+        float closestObjDist = Mathf.Infinity; //Arbitrarily large number to start off
+
+        Vector3 currentPos = gameObject.transform.position;
+
+        foreach (Interactable interactable in InteractionManager.Instance.m_Interactables)
+        {
+            if (interactable.InteractableType.Equals(InteractionManager.Instance.StationInteractableType))
+            {
+                Station station = (Station)interactable;
+                if (station.IngredientStage == _inventory.CurrentIngredient.CurrentIngredientStage) 
+                {
+                    Vector3 objectPos = station.gameObject.transform.position;
+
+                    float objectDist = (objectPos - currentPos).magnitude;
+                    if (objectDist < closestObjDist)
+                    {
+                        closestObj = (Station)interactable;
+                    }
+                }
+
+            }
+        }
+
+        if (closestObj != null)
+        {
+            Debug.LogFormat("STATION {0} IS CLOSEST", closestObj.gameObject.name);
+            return closestObj.GetComponent<Station>();
+        }
+
+        Debug.LogWarning("No station found");
+        return null;
     }
 }

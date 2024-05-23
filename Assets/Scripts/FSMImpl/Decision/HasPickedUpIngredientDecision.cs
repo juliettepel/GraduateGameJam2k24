@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[CreateAssetMenu(menuName = "FSM/Decisions/Has Reached Interactable")]
-public class HasReachedInteractableDecision : Decision
+[CreateAssetMenu(menuName = "FSM/Decisions/Picked Up Ingredient")]
+public class HasPickedUpIngredientDecision : Decision
 {
     //Needed ?
-    public InteractableType InteractableType;
     public override bool Decide(BaseStateMachine stateMachine)
     {
         //InteractionComponent interactable = stateMachine.GetComponent<InteractionComponent>();
@@ -22,12 +21,11 @@ public class HasReachedInteractableDecision : Decision
         //    }
         //}
 
-        NavMeshAgent navMeshAgent = stateMachine.GetComponent<NavMeshAgent>();
-        NPC npc = stateMachine.GetComponent<NPC>();
+        Inventory inventory = stateMachine.GetComponent<Inventory>();
 
-        if (npc.HasReached(navMeshAgent))
+        if (inventory.CurrentIngredient != null)
         {
-            Debug.Log("HasReachedInteractableDecision - REACHED");
+            Debug.Log("HasPickedUpIngredientDecision - Return true");
             return true;
         }
 

@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: NavigatingToIngredientState
   m_EditorClassIdentifier: 
   Action:
-  - {fileID: 11400000, guid: ad6b676941d50d24caf5e9436178f95e, type: 2}
+  - {fileID: 11400000, guid: b2589332787986c4686d22194b6c1f05, type: 2}
+  OnEnterStateActions: []
+  OnExitStateActions: []
   Transitions:
   - {fileID: 11400000, guid: a3775c0a77a7bb447babfac51a1a379f, type: 2}

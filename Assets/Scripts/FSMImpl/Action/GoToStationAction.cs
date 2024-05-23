@@ -3,18 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[CreateAssetMenu(menuName = "FSM/Actions/Go To Interactable")]
-public class GoToInteractableAction : FSMAction
+[CreateAssetMenu(menuName = "FSM/Actions/Go To Station")]
+public class GoToStationAction : FSMAction
 {
-    public InteractableType InteractableType;
     public override void Execute(BaseStateMachine stateMachine)
     {
         NavMeshAgent navMeshAgent = stateMachine.GetComponent<NavMeshAgent>();
         NPC npc = stateMachine.GetComponent<NPC>();
 
-        if (npc.HasReached(navMeshAgent))
-        {
-            navMeshAgent.SetDestination(npc.GetNext().transform.position);
-        }
+        Station station = npc.ChooseStationToGoTo();
+        navMeshAgent.SetDestination(station.transform.position);
     }
 }

@@ -7,7 +7,17 @@ public class BaseStateMachine : MonoBehaviour
 {
     [SerializeField] private BaseState _initialState;
     private Dictionary<Type, Component> _cachedComponents;
-    public BaseState CurrentState { get; set; }
+    public BaseState CurrentState { get; private set; }
+
+    public void GoToState(BaseState state)
+    {
+        if (!CurrentState.Equals(state)) 
+        {
+            CurrentState.DoOnExitState(this);
+            CurrentState = state;
+            CurrentState.DoOnEnterState(this);
+        }
+    }
 
     private void Awake()
     {

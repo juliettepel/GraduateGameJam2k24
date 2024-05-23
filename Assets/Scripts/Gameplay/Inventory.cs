@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    public Ingredient MyIngredient { get; set; }
+    public Ingredient CurrentIngredient { get; set; }
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +19,7 @@ public class Inventory : MonoBehaviour
 
     public void PickupIngredient(Ingredient ingredient) 
     {
-        MyIngredient = ingredient;
+        CurrentIngredient = ingredient;
+        CurrentIngredient.OnGetPickedUp(this.gameObject);
     }
 }
