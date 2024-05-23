@@ -6,13 +6,8 @@ public class InteractionComponent : MonoBehaviour
 {
     public Interactable bestTarget = null;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private bool _canInteract = false;
 
-    // Update is called once per frame
     void Update()
     {
         float distance = Mathf.Infinity;
@@ -28,14 +23,37 @@ public class InteractionComponent : MonoBehaviour
                 if (tempDistance < distance)
                 {
                     distance = tempDistance;
-                    if (distance < 1.0f)
+                    if (distance < interactable.GetInteractionRadius())
                     {
-                        bestTarget = interactable;
+                        interactable.OnInteractionAvailable();
+                        _canInteract = true;
+                    }
+                    else
+                    {
+                        _canInteract = false;
+                    }
 
+                    if (bestTarget != null)
+                    {
                         Debug.Log("Interaction radius");
                     }
                 }
             }
+        }
+    }
+
+    public void Interact()
+    {
+        if(bestTarget == null)
+        {
+            Debug.Log("No target to interact with");
+            return;
+        }
+
+        if(_canInteract)
+        {
+            //Interact here when a button is pressed
+            Debug.Log("[Interaction Component] - Interact");
         }
     }
 }
