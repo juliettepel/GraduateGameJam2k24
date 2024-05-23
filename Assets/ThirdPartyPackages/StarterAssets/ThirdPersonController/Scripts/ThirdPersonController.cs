@@ -159,6 +159,15 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
+            UpdateInteraction();
+        }
+
+        private void UpdateInteraction()
+        {
+            if (_input)
+            {
+
+            }
         }
 
         private void LateUpdate()
