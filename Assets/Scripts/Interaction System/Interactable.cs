@@ -28,6 +28,11 @@ public class Interactable : MonoBehaviour
         }
     }
 
+    void OnDestroy()
+    {
+        InteractionManager.Instance.RemoveInteractable(this);
+    }
+
     public void Reset()
     {
         MeshRenderer cubeRenderer = GetComponent<MeshRenderer>();
@@ -50,4 +55,7 @@ public class Interactable : MonoBehaviour
             meshRenderer.material.color = c;
         }
     }
+
+    public virtual void OnReached(NPC npc) { }
+
 }

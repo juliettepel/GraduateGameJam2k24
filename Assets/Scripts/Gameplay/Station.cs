@@ -6,13 +6,11 @@ public class Station : Interactable
 {
     public IngredientStage StartIngredientStage;
     public IngredientStage EndIngredientStage;
-    public bool IsDone { get; set; }
 
 
     public override void Start()
     {
         base.Start();
-        IsDone = false;
         InteractableType = InteractionManager.Instance.StationInteractableType;
     }
 
@@ -20,6 +18,11 @@ public class Station : Interactable
     void Update()
     {
         
+    }
+
+    public override void OnReached(NPC npc)
+    {
+        npc.UseStation(this);
     }
 
     //public bool UseStation(Ingredient ingredient)

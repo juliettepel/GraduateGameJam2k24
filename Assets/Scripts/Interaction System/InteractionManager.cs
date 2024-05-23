@@ -8,9 +8,16 @@ public class InteractionManager : Singleton<InteractionManager>
 
     public InteractableType StationInteractableType;
     public InteractableType IngredientInteractableType;
+    public InteractableType ServingStationInteractableType;
+
 
     public void AddInteractable(Interactable interactable)
     {
         m_Interactables.Add(interactable);
+    }
+
+    public void RemoveInteractable(Interactable interactable)
+    {
+        m_Interactables.Remove(interactable);
     }
 }
