@@ -50,4 +50,6 @@ public class Interactable : MonoBehaviour
             meshRenderer.material.color = c;
         }
     }
+
+    //public virtual void OnReached() { }
 }

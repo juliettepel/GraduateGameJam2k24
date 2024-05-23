@@ -1,7 +1,5 @@
 using AYellowpaper.SerializedCollections;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -17,6 +15,8 @@ public class Ingredient : Interactable
 
 
     private GameObject _owner;
+
+    public bool IsReadyToServe = false;
 
     // Start is called before the first frame update
     public override void Start()
@@ -36,30 +36,23 @@ public class Ingredient : Interactable
         GameObject activeVisual = null;
         IngredientStageToVisualDict.TryGetValue(CurrentIngredientStage, out activeVisual);
 
-        if(activeVisual != null) 
+        if (activeVisual != null)
         {
             activeVisual.SetActive(true);
         }
-
-        //gameObject.GetComponent<Renderer>().material = IngredientStageToMaterialDict[CurrentIngredientStage];
-        //this.gameObject.GetComponent<Renderer>().material.color = Color.red;
-
-        //var materialsCopy = gameObject.GetComponent<Renderer>().materials;
-        //materialsCopy[0] = IngredientStageToVisualDict[CurrentIngredientStage];
-        //gameObject.GetComponent<Renderer>().materials = materialsCopy;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(_owner != null) 
+        if (_owner != null)
         {
             //Follow owner
             this.transform.position = _owner.transform.position + new Vector3(0, 2, 0);
         }
     }
 
-    public void UseStation(Station station) 
+    public void UseStation(Station station)
     {
         Assert.IsTrue(station.StartIngredientStage == CurrentIngredientStage);
         Assert.IsTrue(station.EndIngredientStage == IngredientStages[CurrentIngredientStageIndex + 1]);
@@ -81,10 +74,25 @@ public class Ingredient : Interactable
         {
             activeVisual.SetActive(true);
         }
+
+        if (CurrentIngredientStageIndex == IngredientStages.Count - 1)
+        {
+            IsReadyToServe = true;
+        }
     }
 
     public void OnGetPickedUp(GameObject owner)
     {
         _owner = owner;
+    }
+
+    public IngredientStage GetNextIngredientStage()
+    {
+        if (CurrentIngredientStageIndex < IngredientStages.Count)
+        {
+            return IngredientStages[CurrentIngredientStageIndex + 1];
+        }
+
+        return CurrentIngredientStage;
     }
 }

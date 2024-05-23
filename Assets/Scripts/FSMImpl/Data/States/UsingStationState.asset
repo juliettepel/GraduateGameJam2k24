@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: UsingStationState
   m_EditorClassIdentifier: 
   Action:
-  - {fileID: 11400000, guid: 2b0cef21378c8e945bc5eff6386bc466, type: 2}
+  - {fileID: 11400000, guid: 5264ad197ad8fd24bb230235b6674a0d, type: 2}
   OnEnterStateActions: []
-  OnExitStateActions: []
-  Transitions: []
+  OnExitStateActions:
+  - {fileID: 11400000, guid: ef9b6342051894645b56ebb7e3d24150, type: 2}
+  Transitions:
+  - {fileID: 11400000, guid: 12ff5fa6012f9ae46ac11639088c62e8, type: 2}

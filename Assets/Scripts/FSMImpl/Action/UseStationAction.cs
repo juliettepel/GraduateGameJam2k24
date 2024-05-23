@@ -9,6 +9,7 @@ public class UseStationAction : FSMAction
     {
         Inventory inventory = stateMachine.GetComponent<Inventory>();
         InteractionComponent interactionComponent = stateMachine.GetComponent<InteractionComponent>();
+        NPC npc = stateMachine.GetComponent<NPC>();
 
         InteractableType interactableType = InteractionManager.Instance.StationInteractableType;
 
@@ -20,7 +21,10 @@ public class UseStationAction : FSMAction
                 Debug.Log("USE STATION");
 
                 Station station = (Station)interactable;
+                npc.CurrentStation = station;
+
                 inventory.CurrentIngredient.UseStation(station);
+                
             }
         }
     }

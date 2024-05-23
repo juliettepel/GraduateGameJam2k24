@@ -12,31 +12,18 @@ public class NPC : MonoBehaviour
     public Vector3 CurrentDestination { get; set; }
 
     private NavMeshAgent _navMeshAgent;
-    private List<Interactable> _interactables = new List<Interactable>();
     private Inventory _inventory;
 
-    private int _currentInteractableIndex = 0;
+    public Station CurrentStation;
 
     // Start is called before the first frame update
     void Start()
     {
         _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
-        _interactables = InteractionManager.Instance.m_Interactables;
-
-        if (_currentInteractableIndex == 0)
-        {
-            _navMeshAgent.SetDestination(_interactables[0].transform.position);
-        }
 
         _inventory = gameObject.GetComponent<Inventory>();
     }
 
-    public Interactable GetNext()
-    {
-        var interactable = _interactables[_currentInteractableIndex];
-        _currentInteractableIndex = (_currentInteractableIndex + 1) % _interactables.Count;
-        return interactable;
-    }
 
     public bool HasReached(NavMeshAgent agent)
     {
@@ -58,6 +45,23 @@ public class NPC : MonoBehaviour
     void Update()
     {
 
+    }
+
+    public Interactable ChooseObjective() 
+    {
+        Ingredient currentIngredient = _inventory.CurrentIngredient;
+        if (currentIngredient == null)
+        {
+            return ChooseIngredientToPickup();
+        }
+        else if (currentIngredient.IsReadyToServe)
+        {
+            return ChooseServingStationToGoTo();
+        }
+        else
+        {
+            return ChooseStationToGoTo();
+        }
     }
 
     //For now just use the nearest, if we have time we could choose it based on which recipe goes next.
@@ -116,6 +120,7 @@ public class NPC : MonoBehaviour
                     float objectDist = (objectPos - currentPos).magnitude;
                     if (objectDist < closestObjDist)
                     {
+                        closestObjDist = objectDist;
                         closestObj = (Station)interactable;
                     }
                 }
@@ -130,6 +135,39 @@ public class NPC : MonoBehaviour
         }
 
         Debug.LogWarning("No station found");
+        return null;
+    }
+
+    //Just find nearest. Might even be only 1 serving station?
+    public ServingStation ChooseServingStationToGoTo()
+    {
+        ServingStation closestObj = null;
+        float closestObjDist = Mathf.Infinity; //Arbitrarily large number to start off
+
+        Vector3 currentPos = gameObject.transform.position;
+
+        foreach (Interactable interactable in InteractionManager.Instance.m_Interactables)
+        {
+            if (interactable.InteractableType.Equals(InteractionManager.Instance.ServingStationInteractableType))
+            {
+                Vector3 objectPos = interactable.gameObject.transform.position;
+
+                float objectDist = (objectPos - currentPos).magnitude;
+                if (objectDist < closestObjDist)
+                {
+                    closestObjDist = objectDist;
+                    closestObj = (ServingStation)interactable;
+                }
+            }
+        }
+
+        if (closestObj != null)
+        {
+            Debug.LogFormat("SERVING STATION {0} IS CLOSEST", closestObj.gameObject.name);
+            return closestObj.GetComponent<ServingStation>();
+        }
+
+        Debug.LogWarning("No ingredient found");
         return null;
     }
 }

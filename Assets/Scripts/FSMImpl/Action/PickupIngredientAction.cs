@@ -9,6 +9,7 @@ public class PickupIngredientAction : FSMAction
     {
         Inventory inventory = stateMachine.GetComponent<Inventory>();
         InteractionComponent interactionComponent = stateMachine.GetComponent<InteractionComponent>();
+        NPC npc = stateMachine.GetComponent<NPC>();
 
         InteractableType interactableType = InteractionManager.Instance.IngredientInteractableType;
 
@@ -18,6 +19,7 @@ public class PickupIngredientAction : FSMAction
             if (interactable.InteractableType.Equals(interactableType))
             {
                 Debug.Log("PICKED UP INGREDIENT");
+
                 inventory.PickupIngredient((Ingredient)interactable);
             }
         }
