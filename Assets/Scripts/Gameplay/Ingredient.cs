@@ -95,4 +95,9 @@ public class Ingredient : Interactable
 
         return CurrentIngredientStage;
     }
+
+    public override void OnReached(NPC npc)
+    {
+        npc.PickupIngredient(this);
+    }
 }

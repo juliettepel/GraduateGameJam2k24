@@ -9,6 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 504431e4a22821743925d3553a112300, type: 3}
-  m_Name: UseStation
+  m_Script: {fileID: 11500000, guid: 7a54f35e2704f4e4dbdc9ad8e4a61064, type: 3}
+  m_Name: CookingState
   m_EditorClassIdentifier: 
+  Action: []
+  OnEnterStateActions: []
+  OnExitStateActions: []
+  Transitions: []

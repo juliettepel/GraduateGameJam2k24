@@ -14,5 +14,10 @@ public class GoToObjectiveAction : FSMAction
         Interactable objective = npc.ChooseObjective();
 
         navMeshAgent.SetDestination(objective.transform.position);
+
+        if(npc.HasReached(navMeshAgent)) 
+        {
+            objective.OnReached(npc);
+        }
     }
 }

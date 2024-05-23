@@ -20,6 +20,11 @@ public class Station : Interactable
         
     }
 
+    public override void OnReached(NPC npc)
+    {
+        npc.UseStation(this);
+    }
+
     //public bool UseStation(Ingredient ingredient)
     //{
     //    if (ingredientStage != IngredientStage)

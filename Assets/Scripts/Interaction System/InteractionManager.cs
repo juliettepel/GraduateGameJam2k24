@@ -15,4 +15,9 @@ public class InteractionManager : Singleton<InteractionManager>
     {
         m_Interactables.Add(interactable);
     }
+
+    public void RemoveInteractable(Interactable interactable)
+    {
+        m_Interactables.Remove(interactable);
+    }
 }

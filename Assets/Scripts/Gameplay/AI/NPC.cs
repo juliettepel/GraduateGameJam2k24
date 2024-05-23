@@ -170,4 +170,22 @@ public class NPC : MonoBehaviour
         Debug.LogWarning("No ingredient found");
         return null;
     }
+
+    public void PickupIngredient(Ingredient ingredient) 
+    {
+        _inventory.PickupIngredient(ingredient);
+    }
+
+    public void UseStation(Station station)
+    {
+        CurrentStation = station;
+        _inventory.CurrentIngredient.UseStation(station);
+    }
+
+    //Yas queen serve
+    public void Serve()
+    {
+        Destroy(_inventory.CurrentIngredient.gameObject);
+        _inventory.CurrentIngredient = null;
+    }
 }
