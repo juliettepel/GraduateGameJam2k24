@@ -30,14 +30,10 @@ public class InteractionComponent : MonoBehaviour
                     distance = tempDistance;
                     if (distance < 1.0f)
                     {
+                        bestTarget = interactable;
+
                         Debug.Log("Interaction radius");
                     }
-
-                    if (bestTarget != null)
-                    {
-
-                    }
-                    bestTarget = interactable;
                 }
             }
         }
