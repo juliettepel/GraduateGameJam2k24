@@ -16,7 +16,7 @@ public class Interactable : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    public void Start()
+    public virtual void Start()
     {
         InteractionManager.Instance.AddInteractable(this);
 
