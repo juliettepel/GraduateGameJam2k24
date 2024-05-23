@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Station : Interactable
 {
-    public IngredientStage IngredientStage;
+    public IngredientStage StartIngredientStage;
+    public IngredientStage EndIngredientStage;
     public bool IsDone { get; set; }
 
 

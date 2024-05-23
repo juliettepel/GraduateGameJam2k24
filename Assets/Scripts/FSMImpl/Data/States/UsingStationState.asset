@@ -12,5 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a54f35e2704f4e4dbdc9ad8e4a61064, type: 3}
   m_Name: UsingStationState
   m_EditorClassIdentifier: 
-  Action: []
+  Action:
+  - {fileID: 11400000, guid: 2b0cef21378c8e945bc5eff6386bc466, type: 2}
+  OnEnterStateActions: []
+  OnExitStateActions: []
   Transitions: []

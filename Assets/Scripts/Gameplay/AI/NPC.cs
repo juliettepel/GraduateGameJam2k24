@@ -5,12 +5,10 @@ using System.Xml.Linq;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Assertions;
 
 public class NPC : MonoBehaviour
 {
-    public Interactable DummyCurrentTarget;
-    public Interactable CurrentTarget { get; set; }
-
     public Vector3 CurrentDestination { get; set; }
 
     private NavMeshAgent _navMeshAgent;
@@ -22,7 +20,6 @@ public class NPC : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Debug.Log("START CALLED");
         _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
         _interactables = InteractionManager.Instance.m_Interactables;
 
@@ -36,10 +33,6 @@ public class NPC : MonoBehaviour
 
     public Interactable GetNext()
     {
-    if(_currentInteractableIndex >= _interactables.Count)
-    {
-            return DummyCurrentTarget;
-    }
         var interactable = _interactables[_currentInteractableIndex];
         _currentInteractableIndex = (_currentInteractableIndex + 1) % _interactables.Count;
         return interactable;
@@ -114,7 +107,9 @@ public class NPC : MonoBehaviour
             if (interactable.InteractableType.Equals(InteractionManager.Instance.StationInteractableType))
             {
                 Station station = (Station)interactable;
-                if (station.IngredientStage == _inventory.CurrentIngredient.CurrentIngredientStage) 
+                Ingredient ingredientInInventory = _inventory.CurrentIngredient;
+
+                if (station.StartIngredientStage == ingredientInInventory.CurrentIngredientStage && station.EndIngredientStage == ingredientInInventory.IngredientStages[ingredientInInventory.CurrentIngredientStageIndex + 1]) 
                 {
                     Vector3 objectPos = station.gameObject.transform.position;
 

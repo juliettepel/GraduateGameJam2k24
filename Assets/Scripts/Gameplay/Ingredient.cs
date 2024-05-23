@@ -1,15 +1,20 @@
+using AYellowpaper.SerializedCollections;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class Ingredient : Interactable
 {
+    [SerializedDictionary("IngredientStage", "GameObject")]
+    public SerializedDictionary<IngredientStage, GameObject> IngredientStageToVisualDict;
+
     public List<IngredientStage> IngredientStages;
     public IngredientStage CurrentIngredientStage;
+
     public int CurrentIngredientStageIndex { get; set; }
 
-    public bool IsCooked { get; set; }
 
     private GameObject _owner;
 
@@ -21,7 +26,27 @@ public class Ingredient : Interactable
         InteractableType = InteractionManager.Instance.IngredientInteractableType;
 
         CurrentIngredientStageIndex = IngredientStages.FindIndex(elem => elem.Equals(CurrentIngredientStage));
-        IsCooked = false;
+
+        foreach (KeyValuePair<IngredientStage, GameObject> pair in IngredientStageToVisualDict)
+        {
+            GameObject go = pair.Value;
+            go.SetActive(false);
+        }
+
+        GameObject activeVisual = null;
+        IngredientStageToVisualDict.TryGetValue(CurrentIngredientStage, out activeVisual);
+
+        if(activeVisual != null) 
+        {
+            activeVisual.SetActive(true);
+        }
+
+        //gameObject.GetComponent<Renderer>().material = IngredientStageToMaterialDict[CurrentIngredientStage];
+        //this.gameObject.GetComponent<Renderer>().material.color = Color.red;
+
+        //var materialsCopy = gameObject.GetComponent<Renderer>().materials;
+        //materialsCopy[0] = IngredientStageToVisualDict[CurrentIngredientStage];
+        //gameObject.GetComponent<Renderer>().materials = materialsCopy;
     }
 
     // Update is called once per frame
@@ -30,15 +55,31 @@ public class Ingredient : Interactable
         if(_owner != null) 
         {
             //Follow owner
-            this.transform.position = _owner.transform.position;
+            this.transform.position = _owner.transform.position + new Vector3(0, 2, 0);
         }
     }
 
     public void UseStation(Station station) 
     {
-        if(station.IngredientStage == CurrentIngredientStage)
+        Assert.IsTrue(station.StartIngredientStage == CurrentIngredientStage);
+        Assert.IsTrue(station.EndIngredientStage == IngredientStages[CurrentIngredientStageIndex + 1]);
+
+        GameObject previousActiveVisual = null;
+        IngredientStageToVisualDict.TryGetValue(CurrentIngredientStage, out previousActiveVisual);
+
+        if (previousActiveVisual != null)
         {
-            CurrentIngredientStage = IngredientStages[++CurrentIngredientStageIndex];
+            previousActiveVisual.SetActive(false);
+        }
+
+        CurrentIngredientStage = IngredientStages[++CurrentIngredientStageIndex];
+
+        GameObject activeVisual = null;
+        IngredientStageToVisualDict.TryGetValue(CurrentIngredientStage, out activeVisual);
+
+        if (activeVisual != null)
+        {
+            activeVisual.SetActive(true);
         }
     }
 
