@@ -30,16 +30,16 @@ public class GameController : Singleton<GameController>
             else
             {
                 // You Win
-                TimeLeft = 0;
-                TimerOn = false;
-                Time.timeScale = 0;
+                //TimeLeft = 0;
+                //TimerOn = false;
+                //Time.timeScale = 0;
             }
 
             if (OrdersServed == OrdersRequired)
             {
                 // You Lose
-                TimerOn = false;
-                Time.timeScale = 0;
+                //TimerOn = false;
+                //Time.timeScale = 0;
             }
             updateTimer(TimeLeft);
             updateOrders();
