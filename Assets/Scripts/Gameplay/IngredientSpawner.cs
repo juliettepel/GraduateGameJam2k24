@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IngredientSpawner : MonoBehaviour
+public class IngredientSpawner : Interactable
 {
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private GameObject ingredientPrefab;

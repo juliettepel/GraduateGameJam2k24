@@ -7,6 +7,7 @@ public class InteractionComponent : MonoBehaviour
     public Interactable bestTarget = null;
     private bool _canInteract = false;
 
+
     void Update()
     {
         float distance = Mathf.Infinity;
