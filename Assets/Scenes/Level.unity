@@ -1776,8 +1776,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duplicationHandling: 1
   DoNotDestroyOnLoad: 1
-  TimeLeft: 300
-  TimerOn: 0
+  TotalTimeLeft: 300
   TimerText: {fileID: 1416453926}
   ServingStation: {fileID: 114224696}
   TeleportStationCooldown: {fileID: 2105790434}

@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering;
 using UnityEngine.UI;
 
 public class GameController : Singleton<GameController>
 {
-    public float TimeLeft;
-    public bool TimerOn = false;
+    public float TotalTimeLeft;
+    private float _currentTimeLeft;
     public TMP_Text TimerText;
 
     public ServingStation ServingStation;
@@ -27,36 +28,32 @@ public class GameController : Singleton<GameController>
     // Start is called before the first frame update
     void Start()
     {
-        TimerOn = true;
         BackgroundAudio.Play();
+        _currentTimeLeft = TotalTimeLeft;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (TimerOn)
+        if (_currentTimeLeft > 0)
         {
-            if (TimeLeft > 0)
-            {
-                TimeLeft -= Time.deltaTime;
-            }
-            else
-            {
-                // You Win
-                //TimeLeft = 0;
-                //TimerOn = false;
-                //Time.timeScale = 0;
-            }
-
-            if (OrdersServed == OrdersRequired)
-            {
-                // You Lose
-                //TimerOn = false;
-                //Time.timeScale = 0;
-            }
-            updateTimer(TimeLeft);
-            updateOrders();
+            _currentTimeLeft -= Time.deltaTime;
         }
+        else
+        {
+            // You Win
+            UnityEngine.SceneManagement.SceneManager.LoadScene("WinScreen");
+            Reset();
+        }
+
+        if (OrdersServed >= OrdersRequired)
+        {
+            // You Lose
+            UnityEngine.SceneManagement.SceneManager.LoadScene("LoseScreen");
+            Reset();
+        }
+        updateTimer(_currentTimeLeft);
+        updateOrders();
 
         TeleportStationCooldown.value = ServingStation.currentSliderValue;
     }
@@ -72,5 +69,11 @@ public class GameController : Singleton<GameController>
     void updateOrders()
     {
         OrderText.text = string.Format("Orders Left: {0}", OrdersRequired - OrdersServed);
+    }
+
+    private void Reset()
+    {
+        _currentTimeLeft = TotalTimeLeft;
+        OrdersServed = 0;
     }
 }
