@@ -27,7 +27,10 @@ public class Interactable : MonoBehaviour
     {
         InteractionManager.Instance.AddInteractable(this);
 
-        InteractPrompt.gameObject.SetActive(false);
+        if(InteractPrompt != null)
+        {
+            InteractPrompt.gameObject.SetActive(false);
+        }
 
         MeshRenderer cubeRenderer = GetComponent<MeshRenderer>();
         if(cubeRenderer)
@@ -59,8 +62,10 @@ public class Interactable : MonoBehaviour
     {
         //Display a feedback here
         Debug.Log("[Interactable] - OnInteraction");
-        InteractPrompt.gameObject.SetActive(true);
-
+        if (InteractPrompt != null)
+        {
+            InteractPrompt.gameObject.SetActive(true);
+        }
         if (!IsSabotaged)
         {
             MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
