@@ -268,8 +268,8 @@ MonoBehaviour:
   currentValue: 0
   CurrentNPC: {fileID: 0}
   slider: {fileID: 1042962144426388669}
-  IntactState: {fileID: 0}
-  SabotagedState: {fileID: 0}
+  IntactState: {fileID: 8374413904602303645}
+  SabotagedState: {fileID: 7250827504974772630}
   usedStationEvent:
     m_PersistentCalls:
       m_Calls: []

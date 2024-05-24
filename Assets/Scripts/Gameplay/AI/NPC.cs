@@ -201,6 +201,7 @@ public class NPC : MonoBehaviour
     public IEnumerator UseStation(Station station, float seconds, UsedStationEvent usedStationEvent)
     {
         CurrentStation = station;
+        CurrentStation.InUse = true;
         yield return new WaitForSeconds(seconds);
 
         usedStationEvent.Invoke(CurrentStation.CurrentNPC);

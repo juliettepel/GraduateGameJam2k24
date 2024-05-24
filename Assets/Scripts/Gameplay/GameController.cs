@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class GameController : Singleton<GameController>
 {
@@ -12,6 +13,9 @@ public class GameController : Singleton<GameController>
     public int OrdersRequired;
     public TMP_Text OrderText;
     public int OrdersServed { get; set; } = 0;
+
+    public Transform[] servingStationLocations;
+
     // Start is called before the first frame update
     void Start()
     {
