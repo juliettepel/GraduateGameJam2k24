@@ -10,8 +10,6 @@ public class Interactable : MonoBehaviour
     protected Color _defaultColor;
     protected Color _targetColor;
 
-    public Color SabotagedColor;
-
     public Transform InteractPosition;
 
     public bool IsCurrentlyAnObjective { get; set; } = false;
@@ -36,7 +34,7 @@ public class Interactable : MonoBehaviour
         }
     }
 
-    void OnDestroy()
+    public virtual void OnDestroy()
     {
         InteractionManager.Instance.RemoveInteractable(this);
     }
@@ -71,31 +69,12 @@ public class Interactable : MonoBehaviour
     {
         IsSabotaged = true;
         SabotageController.Instance.AddSabotaged(this);
-
-        ToggleSabotagedColorOn();
     }
+
 
     public virtual void OnReached(NPC npc) 
     {
         npc.CurrentObjective = null;
-    }
-
-    private void ToggleSabotagedColorOn()
-    {
-        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-        if (meshRenderer)
-        {
-            meshRenderer.material.color = SabotagedColor;
-        }
-    }
-
-    public void ResetDefaultColor()
-    {
-        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-        if (meshRenderer)
-        {
-            meshRenderer.material.color = _defaultColor;
-        }
     }
 
     public virtual bool IsValidObjective() { return true; }

@@ -79,7 +79,7 @@ public class NPC : MonoBehaviour
 
         foreach (Interactable interactable in InteractionManager.Instance.m_Interactables) 
         {
-            if (interactable.InteractableType.Equals(InteractionManager.Instance.IngredientInteractableType)) 
+            if (interactable.InteractableType.Equals(InteractionManager.Instance.IngredientInteractableType))
             {
                 Ingredient ingredient = (Ingredient)interactable;
                 if(ingredient.IsValidObjective()) 

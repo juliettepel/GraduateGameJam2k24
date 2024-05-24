@@ -9,6 +9,7 @@ public class InteractionManager : Singleton<InteractionManager>
     public InteractableType StationInteractableType;
     public InteractableType IngredientInteractableType;
     public InteractableType ServingStationInteractableType;
+    public InteractableType IngredientSpawnerInteractableType;
 
 
     public void AddInteractable(Interactable interactable)

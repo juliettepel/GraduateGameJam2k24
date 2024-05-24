@@ -14,6 +14,8 @@ public class Station : Interactable
     public NPC CurrentNPC;
 
     public Slider slider;
+    public GameObject IntactState;
+    public GameObject SabotagedState;
 
     public bool InUse { get; set; } = false;
 
@@ -27,6 +29,7 @@ public class Station : Interactable
 
         base.Start();
         InteractableType = InteractionManager.Instance.StationInteractableType;
+        ToggleSabotagedVisuals();
     }
 
     // Update is called once per frame
@@ -72,7 +75,7 @@ public class Station : Interactable
         IsCurrentlyAnObjective = false;
         IsSabotaged = false;
 
-        ResetDefaultColor();
+        ToggleSabotagedVisuals();
     }
 
     private void UpdateFeedback()
@@ -82,7 +85,14 @@ public class Station : Interactable
             currentValue = Mathf.Lerp(0.0f, 1.0f, currentFeedbackTime / TimeToUse);
             slider.value = currentValue;
             currentFeedbackTime += Time.deltaTime;
+            time += Time.deltaTime;
         }
+    }
+
+    public override void OnInteract()
+    {
+        base.OnInteract();
+        ToggleSabotagedVisuals();
     }
 
     private void HideFeedback()
@@ -90,5 +100,11 @@ public class Station : Interactable
         currentFeedbackTime = 0;
         slider.value = 0;
         slider.gameObject.SetActive(false);
+    }
+
+    public void ToggleSabotagedVisuals()
+    {
+        SabotagedState.SetActive(IsSabotaged);
+        IntactState.SetActive(!IsSabotaged);
     }
 }
