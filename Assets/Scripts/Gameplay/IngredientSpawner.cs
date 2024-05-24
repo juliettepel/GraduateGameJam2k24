@@ -13,7 +13,10 @@ public class IngredientSpawner : Interactable
     public GameObject IntactState;
     public GameObject SabotagedState;
 
-    public float SabotatedTimer = 4;
+    public float SabotatedTimer = 4.0f;
+    public float TimeUntilNewIngredient = 4.0f;
+
+    public bool CanSpawnIngredient = true;
 
     // Start is called before the first frame update
     public override void Start()
@@ -26,7 +29,7 @@ public class IngredientSpawner : Interactable
     // Update is called once per frame
     void Update()
     {
-        if(_currentIngredient == null && !IsSabotaged)
+        if(_currentIngredient == null && !IsSabotaged && CanSpawnIngredient)
         {
             SpawnIngredient();
         }
@@ -49,6 +52,7 @@ public class IngredientSpawner : Interactable
         Destroy(_currentIngredient.gameObject);
         ToggleSabotagedVisuals();
         StartCoroutine(CountdownSabotage());
+        CanSpawnIngredient = false;
     }
 
     public IEnumerator CountdownSabotage()
@@ -58,10 +62,22 @@ public class IngredientSpawner : Interactable
         OnSabotagedCountdownFinished();
     }
 
+    public IEnumerator CountdownIngredient()
+    {
+        yield return new WaitForSeconds(TimeUntilNewIngredient);
+
+        OnNewIngredientCountdownFinished();
+    }
+
+    private void OnNewIngredientCountdownFinished()
+    {
+        CanSpawnIngredient = true;
+    }
     private void OnSabotagedCountdownFinished()
     {
         IsSabotaged = false;
         ToggleSabotagedVisuals();
+        StartCoroutine(CountdownIngredient());
     }
 
     public void ToggleSabotagedVisuals()

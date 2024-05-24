@@ -64,7 +64,10 @@ public class NPC : MonoBehaviour
             CurrentObjective =  ChooseStationToGoTo();
         }
 
-        Debug.LogFormat("{0} chose objective {1}", gameObject.name, CurrentObjective.gameObject.name);
+        if (CurrentObjective != null)
+        {
+            Debug.LogFormat("{0} chose objective {1}", gameObject.name, CurrentObjective.gameObject.name);
+        }
 
         CurrentObjective.IsCurrentlyAnObjective = true;
     }
