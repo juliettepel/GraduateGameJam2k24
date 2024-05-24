@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8851373703061486681}
   - component: {fileID: 6582266455259136438}
   - component: {fileID: 378361199938592749}
+  - component: {fileID: 4754377108094262614}
   m_Layer: 0
   m_Name: ProgressBarCanvas
   m_TagString: Untagged
@@ -102,6 +103,18 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &4754377108094262614
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 828967702412963990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7175f958ebcf7a419505d10d704fe2e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &8428119267162458108
 PrefabInstance:
   m_ObjectHideFlags: 0
