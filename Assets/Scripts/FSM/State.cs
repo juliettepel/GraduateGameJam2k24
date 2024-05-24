@@ -6,6 +6,10 @@ using UnityEngine;
 public sealed class State : BaseState
 {
     public List<FSMAction> Action = new List<FSMAction>();
+
+    public List<FSMAction> OnEnterStateActions = new List<FSMAction>();
+    public List<FSMAction> OnExitStateActions = new List<FSMAction>();
+
     public List<Transition> Transitions = new List<Transition>();
 
     public override void Execute(BaseStateMachine machine)
@@ -15,5 +19,16 @@ public sealed class State : BaseState
 
         foreach (var transition in Transitions)
             transition.Execute(machine);
+    }
+    public override void DoOnEnterState(BaseStateMachine machine)
+    {
+        foreach (var action in OnEnterStateActions)
+            action.Execute(machine);
+    }
+
+    public override void DoOnExitState(BaseStateMachine machine)
+    {
+        foreach (var action in OnExitStateActions)
+            action.Execute(machine);
     }
 }

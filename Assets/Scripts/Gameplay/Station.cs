@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class Station : Interactable
 {
-    public IngredientStage IngredientStage;
-    public bool IsDone { get; set; }
+    public float TimeToUse = 1.0f;
+
+    public IngredientStage StartIngredientStage;
+    public IngredientStage EndIngredientStage;
+
+    public bool InUse { get; set; } = false;
 
 
-    // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
-        IsDone = false;
+        base.Start();
         InteractableType = InteractionManager.Instance.StationInteractableType;
     }
 
@@ -21,15 +24,17 @@ public class Station : Interactable
         
     }
 
-    //public bool UseStation(Ingredient ingredient)
-    //{
-    //    if (ingredientStage != IngredientStage)
-    //    {
-    //        return false;
-    //    }
+    public override void OnReached(NPC npc)
+    {
+        InUse = true;
+        StartCoroutine(npc.UseStation(this, TimeToUse));
+        //InUse = false;
+        npc.CurrentObjective = null;
+        IsCurrentlyAnObjective = false;
+    }
 
-    //    IsDone = true;
-
-    //    return true;
-    //}
+    public override bool IsValidObjective()
+    {
+        return !IsCurrentlyAnObjective && !InUse;
+    }
 }

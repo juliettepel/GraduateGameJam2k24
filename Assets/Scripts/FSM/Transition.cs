@@ -13,11 +13,11 @@ public sealed class Transition : ScriptableObject
     {
         if (Decision.Decide(stateMachine) && !(TrueState is RemainInState))
         {
-            stateMachine.CurrentState = TrueState;
+            stateMachine.GoToState(TrueState);
         }
         else if (!(FalseState is RemainInState)) 
         {
-            stateMachine.CurrentState = FalseState;
+            stateMachine.GoToState(FalseState);
         }
     }
 }

@@ -10,6 +10,9 @@ public class Interactable : MonoBehaviour
     Color defaultColor;
     Color targetColor;
 
+    public bool IsCurrentlyAnObjective { get; set; } = false;
+
+
     public float GetInteractionRadius()
     {
         return m_InteractionRadius;
@@ -26,6 +29,11 @@ public class Interactable : MonoBehaviour
             defaultColor = cubeRenderer.material.color;
             targetColor = new Color(defaultColor.r / 2, defaultColor.g / 2, defaultColor.b / 2, 0.5f);
         }
+    }
+
+    void OnDestroy()
+    {
+        InteractionManager.Instance.RemoveInteractable(this);
     }
 
     public void Reset()
@@ -50,4 +58,11 @@ public class Interactable : MonoBehaviour
             meshRenderer.material.color = c;
         }
     }
+
+    public virtual void OnReached(NPC npc) 
+    {
+        npc.CurrentObjective = null;
+    }
+
+    public virtual bool IsValidObjective() { return true; }
 }

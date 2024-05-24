@@ -1,17 +1,22 @@
-using System.Collections;
+using AYellowpaper.SerializedCollections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class Ingredient : Interactable
 {
+    [SerializedDictionary("IngredientStage", "GameObject")]
+    public SerializedDictionary<IngredientStage, GameObject> IngredientStageToVisualDict;
+
     public List<IngredientStage> IngredientStages;
     public IngredientStage CurrentIngredientStage;
+
     public int CurrentIngredientStageIndex { get; set; }
 
-    public bool IsCooked { get; set; }
 
     private GameObject _owner;
+
+    public bool IsReadyToServe = false;
 
     // Start is called before the first frame update
     public override void Start()
@@ -21,29 +26,85 @@ public class Ingredient : Interactable
         InteractableType = InteractionManager.Instance.IngredientInteractableType;
 
         CurrentIngredientStageIndex = IngredientStages.FindIndex(elem => elem.Equals(CurrentIngredientStage));
-        IsCooked = false;
+
+        foreach (KeyValuePair<IngredientStage, GameObject> pair in IngredientStageToVisualDict)
+        {
+            GameObject go = pair.Value;
+            go.SetActive(false);
+        }
+
+        GameObject activeVisual = null;
+        IngredientStageToVisualDict.TryGetValue(CurrentIngredientStage, out activeVisual);
+
+        if (activeVisual != null)
+        {
+            activeVisual.SetActive(true);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(_owner != null) 
+        if (_owner != null)
         {
             //Follow owner
-            this.transform.position = _owner.transform.position;
+            this.transform.position = _owner.transform.position + new Vector3(0, 2, 0);
         }
     }
 
-    public void UseStation(Station station) 
+    public void DoProcessAtStation(Station station)
     {
-        if(station.IngredientStage == CurrentIngredientStage)
+        Assert.IsTrue(station.StartIngredientStage == CurrentIngredientStage);
+        Assert.IsTrue(station.EndIngredientStage == IngredientStages[CurrentIngredientStageIndex + 1]);
+
+        GameObject previousActiveVisual = null;
+        IngredientStageToVisualDict.TryGetValue(CurrentIngredientStage, out previousActiveVisual);
+
+        if (previousActiveVisual != null)
         {
-            CurrentIngredientStage = IngredientStages[++CurrentIngredientStageIndex];
+            previousActiveVisual.SetActive(false);
+        }
+
+        CurrentIngredientStage = IngredientStages[++CurrentIngredientStageIndex];
+
+        GameObject activeVisual = null;
+        IngredientStageToVisualDict.TryGetValue(CurrentIngredientStage, out activeVisual);
+
+        if (activeVisual != null)
+        {
+            activeVisual.SetActive(true);
+        }
+
+        if (CurrentIngredientStageIndex == IngredientStages.Count - 1)
+        {
+            IsReadyToServe = true;
         }
     }
 
     public void OnGetPickedUp(GameObject owner)
     {
         _owner = owner;
+    }
+
+    public IngredientStage GetNextIngredientStage()
+    {
+        if (CurrentIngredientStageIndex < IngredientStages.Count)
+        {
+            return IngredientStages[CurrentIngredientStageIndex + 1];
+        }
+
+        return CurrentIngredientStage;
+    }
+
+    public override void OnReached(NPC npc)
+    {
+        npc.PickupIngredient(this);
+        npc.CurrentObjective = null;
+        IsCurrentlyAnObjective = false;
+    }
+
+    public override bool IsValidObjective()
+    {
+        return !IsCurrentlyAnObjective && _owner == null;
     }
 }
