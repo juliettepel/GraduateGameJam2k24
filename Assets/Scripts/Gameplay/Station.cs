@@ -25,6 +25,7 @@ public class Station : Interactable
 
         base.Start();
         InteractableType = InteractionManager.Instance.StationInteractableType;
+        ToggleSabotagedVisuals();
     }
 
     // Update is called once per frame
@@ -70,7 +71,13 @@ public class Station : Interactable
         IsCurrentlyAnObjective = false;
         IsSabotaged = false;
 
-        ResetDefaultColor();
+        ToggleSabotagedVisuals();
+    }
+
+    public override void OnInteract()
+    {
+        base.OnInteract();
+        ToggleSabotagedVisuals();
     }
 
     private void UpdateFeedback()
@@ -79,7 +86,7 @@ public class Station : Interactable
         while (time < TimeToUse)
         {
             currentValue = Mathf.Lerp(0, 1, time / TimeToUse);
-            Debug.Log("LERP" + currentValue);
+            //Debug.Log("LERP" + currentValue);
             time += Time.deltaTime;
         }
 
@@ -90,6 +97,10 @@ public class Station : Interactable
 
     }
 
-
+    private void ToggleSabotagedVisuals()
+    {
+        SabotagedState.SetActive(IsSabotaged);
+        IntactState.SetActive(!IsSabotaged);
+    }
 
 }
