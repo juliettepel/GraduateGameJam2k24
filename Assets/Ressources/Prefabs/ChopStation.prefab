@@ -153,10 +153,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractionRadius: 2
+  SabotagedColor: {r: 1, g: 0.86054194, b: 0, a: 0}
   InteractPosition: {fileID: 5899344695966434210}
   TimeToUse: 3
+  TimeToRepair: 1
   StartIngredientStage: {fileID: 11400000, guid: 34cafc3b13d463442ad56c7caa7c3003, type: 2}
   EndIngredientStage: {fileID: 11400000, guid: 29d798499c8125146ac27469032d5d77, type: 2}
+  CurrentNPC: {fileID: 0}
+  usedStationEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  repairedStationEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &8501209270014101073
 GameObject:
   m_ObjectHideFlags: 0

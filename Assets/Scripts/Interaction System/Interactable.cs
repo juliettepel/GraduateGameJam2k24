@@ -7,13 +7,15 @@ public class Interactable : MonoBehaviour
     public InteractableType InteractableType { get; set; }
     
     [SerializeField] private float m_InteractionRadius = 1.0f;
-    Color defaultColor;
-    Color targetColor;
+    protected Color _defaultColor;
+    protected Color _targetColor;
+
+    public Color SabotagedColor;
 
     public Transform InteractPosition;
 
     public bool IsCurrentlyAnObjective { get; set; } = false;
-    public bool IsSabotaged { set; get; } = false;
+    public bool IsSabotaged = false;
 
 
     public float GetInteractionRadius()
@@ -29,8 +31,8 @@ public class Interactable : MonoBehaviour
         MeshRenderer cubeRenderer = GetComponent<MeshRenderer>();
         if(cubeRenderer)
         {
-            defaultColor = cubeRenderer.material.color;
-            targetColor = new Color(defaultColor.r / 2, defaultColor.g / 2, defaultColor.b / 2, 0.5f);
+            _defaultColor = cubeRenderer.material.color;
+            _targetColor = new Color(_defaultColor.r / 2, _defaultColor.g / 2, _defaultColor.b / 2, 0.5f);
         }
     }
 
@@ -44,7 +46,7 @@ public class Interactable : MonoBehaviour
         MeshRenderer cubeRenderer = GetComponent<MeshRenderer>();
         if (cubeRenderer)
         {
-            cubeRenderer.material.color = defaultColor;
+            cubeRenderer.material.color = _defaultColor;
         }
     }
 
@@ -53,20 +55,47 @@ public class Interactable : MonoBehaviour
         //Display a feedback here
         Debug.Log("[Interactable] - OnInteraction");
 
-        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-        if (meshRenderer)
+        if(!IsSabotaged)
         {
-            //Debug.Log(Mathf.PingPong(Time.time, 1.0f));
-            Color c = Color.Lerp(defaultColor, targetColor, Mathf.PingPong(Time.time, 1.0f));
-            meshRenderer.material.color = c;
+            MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+            if (meshRenderer)
+            {
+                //Debug.Log(Mathf.PingPong(Time.time, 1.0f));
+                Color c = Color.Lerp(_defaultColor, _targetColor, Mathf.PingPong(Time.time, 1.0f));
+                meshRenderer.material.color = c;
+            }
         }
     }
 
-    public virtual void OnInteract() { }
+    public virtual void OnInteract() 
+    {
+        IsSabotaged = true;
+        SabotageController.Instance.AddSabotaged(this);
+
+        ToggleSabotagedColorOn();
+    }
 
     public virtual void OnReached(NPC npc) 
     {
         npc.CurrentObjective = null;
+    }
+
+    private void ToggleSabotagedColorOn()
+    {
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        if (meshRenderer)
+        {
+            meshRenderer.material.color = SabotagedColor;
+        }
+    }
+
+    public void ResetDefaultColor()
+    {
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        if (meshRenderer)
+        {
+            meshRenderer.material.color = _defaultColor;
+        }
     }
 
     public virtual bool IsValidObjective() { return true; }

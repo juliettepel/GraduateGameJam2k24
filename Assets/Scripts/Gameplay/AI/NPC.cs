@@ -191,24 +191,29 @@ public class NPC : MonoBehaviour
         CurrentStation = null;
     }
 
+    void OnStationRepaired(Station station)
+    {
+        StartCoroutine(UseStation(station, station.TimeToUse, station.usedStationEvent));
+    }
+
     public IEnumerator UseStation(Station station, float seconds, UsedStationEvent usedStationEvent)
     {
         CurrentStation = station;
         yield return new WaitForSeconds(seconds);
 
-        usedStationEvent.Invoke(CurrentStation.currentNPC);
+        usedStationEvent.Invoke(CurrentStation.CurrentNPC);
 
         OnStationUsed(station);
     }
 
-    public IEnumerator RepairStation(Station station, float seconds, UsedStationEvent usedStationEvent)
+    public IEnumerator RepairStation(Station station, float seconds, RepairedStationEvent repairedStationEvent)
     {
         CurrentStation = station;
         yield return new WaitForSeconds(seconds);
 
-        usedStationEvent.Invoke(CurrentStation.currentNPC);
+        repairedStationEvent.Invoke(CurrentStation.CurrentNPC);
 
-        OnStationUsed(station);
+        OnStationRepaired(station);
     }
 
     //Yas queen serve
