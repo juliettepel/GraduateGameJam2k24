@@ -1,17 +1,19 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Station : Interactable
 {
     public float TimeToUse = 1.0f;
     public float TimeToRepair = 1.0f;
 
+    float currentFeedbackTime = 0;
+
     public IngredientStage StartIngredientStage;
     public IngredientStage EndIngredientStage;
-    float currentValue;
+    public float currentValue;
     public NPC CurrentNPC;
+
+    public Slider slider;
 
     public bool InUse { get; set; } = false;
 
@@ -34,13 +36,13 @@ public class Station : Interactable
          {
             UpdateFeedback();
          }
-
     }
 
     public override void OnReached(NPC npc)
     {
         CurrentNPC = npc;
         InUse = true;
+        slider.gameObject.SetActive(true);
 
         if (IsSabotaged)
         {
@@ -75,21 +77,18 @@ public class Station : Interactable
 
     private void UpdateFeedback()
     {
-        float time = 0;
-        while (time < TimeToUse)
+        if (currentFeedbackTime < TimeToUse)
         {
-            currentValue = Mathf.Lerp(0, 1, time / TimeToUse);
-            Debug.Log("LERP" + currentValue);
-            time += Time.deltaTime;
+            currentValue = Mathf.Lerp(0.0f, 1.0f, currentFeedbackTime / TimeToUse);
+            slider.value = currentValue;
+            currentFeedbackTime += Time.deltaTime;
         }
-
     }
 
     private void HideFeedback()
     {
-
+        currentFeedbackTime = 0;
+        slider.value = 0;
+        slider.gameObject.SetActive(false);
     }
-
-
-
 }
