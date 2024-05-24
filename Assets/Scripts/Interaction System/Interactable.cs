@@ -36,6 +36,10 @@ public class Interactable : MonoBehaviour
 
     public virtual void OnDestroy()
     {
+        if(this == null)
+        {
+            return;
+        }
         InteractionManager.Instance.RemoveInteractable(this);
     }
 
