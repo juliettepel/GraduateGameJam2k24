@@ -13,8 +13,9 @@ public class NPC : MonoBehaviour
 
     private NavMeshAgent _navMeshAgent;
     private Inventory _inventory;
-
+    public float ReachObjectiveVelocityTolerance = 0;
     public Station CurrentStation;
+    public Interactable CurrentObjective { get; set; } = null;
 
     // Start is called before the first frame update
     void Start()
@@ -31,7 +32,7 @@ public class NPC : MonoBehaviour
         {
             if (agent.remainingDistance <= agent.stoppingDistance)
             {
-                if (!agent.hasPath || agent.velocity.sqrMagnitude == 0f)
+                if (!agent.hasPath || agent.velocity.sqrMagnitude <= ReachObjectiveVelocityTolerance)
                 {
                     return true;
                 }
@@ -47,21 +48,30 @@ public class NPC : MonoBehaviour
 
     }
 
-    public Interactable ChooseObjective() 
+    public void ChooseObjective() 
     {
-        Ingredient currentIngredient = _inventory.CurrentIngredient;
-        if (currentIngredient == null)
+        if (CurrentObjective != null) 
         {
-            return ChooseIngredientToPickup();
+            Debug.LogFormat("{0} has objective {1}", gameObject.name, CurrentObjective.gameObject.name);
+            return;
         }
-        else if (currentIngredient.IsReadyToServe)
+
+        if (_inventory.CurrentIngredient == null)
         {
-            return ChooseServingStationToGoTo();
+            CurrentObjective = ChooseIngredientToPickup();
+        }
+        else if (_inventory.CurrentIngredient.IsReadyToServe)
+        {
+            CurrentObjective = ChooseServingStationToGoTo();
         }
         else
         {
-            return ChooseStationToGoTo();
+            CurrentObjective =  ChooseStationToGoTo();
         }
+
+        Debug.LogFormat("{0} chose objective {1}", gameObject.name, CurrentObjective.gameObject.name);
+
+        CurrentObjective.IsCurrentlyAnObjective = true;
     }
 
     //For now just use the nearest, if we have time we could choose it based on which recipe goes next.
@@ -76,21 +86,24 @@ public class NPC : MonoBehaviour
         {
             if (interactable.InteractableType.Equals(InteractionManager.Instance.IngredientInteractableType)) 
             {
-                Vector3 objectPos = interactable.gameObject.transform.position;
-
-                float objectDist = (objectPos - currentPos).magnitude;
-                if(objectDist < closestObjDist) 
+                Ingredient ingredient = (Ingredient)interactable;
+                if(ingredient.IsValidObjective()) 
                 {
-                    closestObjDist = objectDist;
-                    closestObj = (Ingredient)interactable;
+                    Vector3 objectPos = interactable.gameObject.transform.position;
+
+                    float objectDist = (objectPos - currentPos).magnitude;
+                    if (objectDist < closestObjDist)
+                    {
+                        closestObjDist = objectDist;
+                        closestObj = ingredient;
+                    }
                 }
             }
         }
 
         if (closestObj != null) 
         {
-            Debug.LogFormat("INGREDIENT {0} IS CLOSEST", closestObj.gameObject.name);
-            return closestObj.GetComponent<Ingredient>();
+            return closestObj;
         }
 
         Debug.LogWarning("No ingredient found");
@@ -115,22 +128,23 @@ public class NPC : MonoBehaviour
 
                 if (station.StartIngredientStage == ingredientInInventory.CurrentIngredientStage && station.EndIngredientStage == ingredientInInventory.IngredientStages[ingredientInInventory.CurrentIngredientStageIndex + 1]) 
                 {
-                    Vector3 objectPos = station.gameObject.transform.position;
-
-                    float objectDist = (objectPos - currentPos).magnitude;
-                    if (objectDist < closestObjDist)
+                    if (station.IsValidObjective())
                     {
-                        closestObjDist = objectDist;
-                        closestObj = (Station)interactable;
+                        Vector3 objectPos = station.gameObject.transform.position;
+
+                        float objectDist = (objectPos - currentPos).magnitude;
+                        if (objectDist < closestObjDist)
+                        {
+                            closestObjDist = objectDist;
+                            closestObj = station;
+                        }
                     }
                 }
-
             }
         }
 
         if (closestObj != null)
         {
-            Debug.LogFormat("STATION {0} IS CLOSEST", closestObj.gameObject.name);
             return closestObj.GetComponent<Station>();
         }
 
@@ -163,7 +177,6 @@ public class NPC : MonoBehaviour
 
         if (closestObj != null)
         {
-            Debug.LogFormat("SERVING STATION {0} IS CLOSEST", closestObj.gameObject.name);
             return closestObj.GetComponent<ServingStation>();
         }
 
@@ -176,16 +189,35 @@ public class NPC : MonoBehaviour
         _inventory.PickupIngredient(ingredient);
     }
 
-    public void UseStation(Station station)
+    void OnStationUsed(Station station)
+    {
+        station.InUse = false;
+        _inventory.CurrentIngredient.DoProcessAtStation(station);
+        CurrentStation = null;
+    }
+
+    public IEnumerator UseStation(Station station, float seconds)
     {
         CurrentStation = station;
-        _inventory.CurrentIngredient.UseStation(station);
+        yield return new WaitForSeconds(seconds);
+
+        OnStationUsed(station);
     }
 
     //Yas queen serve
     public void Serve()
     {
+        Debug.LogFormat("{0} served {1}", gameObject.name, _inventory.CurrentIngredient.name);
         Destroy(_inventory.CurrentIngredient.gameObject);
         _inventory.CurrentIngredient = null;
+
+        GameController.Instance.OrdersServed++;
+    }
+
+    //todo - pretty sure I didnt implement this properly
+    private IEnumerator Countdown(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        Debug.Log("USING STATION TIMER!");
     }
 }

@@ -10,6 +10,9 @@ public class Interactable : MonoBehaviour
     Color defaultColor;
     Color targetColor;
 
+    public bool IsCurrentlyAnObjective { get; set; } = false;
+
+
     public float GetInteractionRadius()
     {
         return m_InteractionRadius;
@@ -56,6 +59,10 @@ public class Interactable : MonoBehaviour
         }
     }
 
-    public virtual void OnReached(NPC npc) { }
+    public virtual void OnReached(NPC npc) 
+    {
+        npc.CurrentObjective = null;
+    }
 
+    public virtual bool IsValidObjective() { return true; }
 }

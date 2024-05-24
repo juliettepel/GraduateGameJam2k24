@@ -21,5 +21,6 @@ public class ServingStation : Interactable
     public override void OnReached(NPC npc)
     {
         npc.Serve();
+        npc.CurrentObjective = null;
     }
 }

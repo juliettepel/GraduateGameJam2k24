@@ -11,13 +11,12 @@ public class GoToObjectiveAction : FSMAction
         NavMeshAgent navMeshAgent = stateMachine.GetComponent<NavMeshAgent>();
         NPC npc = stateMachine.GetComponent<NPC>();
 
-        Interactable objective = npc.ChooseObjective();
-
-        navMeshAgent.SetDestination(objective.transform.position);
+        npc.ChooseObjective();
+        navMeshAgent.SetDestination(npc.CurrentObjective.transform.position);
 
         if(npc.HasReached(navMeshAgent)) 
         {
-            objective.OnReached(npc);
+            npc.CurrentObjective.OnReached(npc);
         }
     }
 }

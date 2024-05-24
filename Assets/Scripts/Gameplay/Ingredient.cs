@@ -52,7 +52,7 @@ public class Ingredient : Interactable
         }
     }
 
-    public void UseStation(Station station)
+    public void DoProcessAtStation(Station station)
     {
         Assert.IsTrue(station.StartIngredientStage == CurrentIngredientStage);
         Assert.IsTrue(station.EndIngredientStage == IngredientStages[CurrentIngredientStageIndex + 1]);
@@ -99,5 +99,12 @@ public class Ingredient : Interactable
     public override void OnReached(NPC npc)
     {
         npc.PickupIngredient(this);
+        npc.CurrentObjective = null;
+        IsCurrentlyAnObjective = false;
+    }
+
+    public override bool IsValidObjective()
+    {
+        return !IsCurrentlyAnObjective && _owner == null;
     }
 }

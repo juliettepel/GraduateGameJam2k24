@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class Station : Interactable
 {
+    public float TimeToUse = 1.0f;
+
     public IngredientStage StartIngredientStage;
     public IngredientStage EndIngredientStage;
+
+    public bool InUse { get; set; } = false;
 
 
     public override void Start()
@@ -22,18 +26,15 @@ public class Station : Interactable
 
     public override void OnReached(NPC npc)
     {
-        npc.UseStation(this);
+        InUse = true;
+        StartCoroutine(npc.UseStation(this, TimeToUse));
+        //InUse = false;
+        npc.CurrentObjective = null;
+        IsCurrentlyAnObjective = false;
     }
 
-    //public bool UseStation(Ingredient ingredient)
-    //{
-    //    if (ingredientStage != IngredientStage)
-    //    {
-    //        return false;
-    //    }
-
-    //    IsDone = true;
-
-    //    return true;
-    //}
+    public override bool IsValidObjective()
+    {
+        return !IsCurrentlyAnObjective && !InUse;
+    }
 }
