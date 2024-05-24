@@ -27,6 +27,8 @@ public class Station : Interactable
         usedStationEvent.AddListener(OnStationUseDone);
         repairedStationEvent.AddListener(OnStationRepaired);
 
+        slider.gameObject.SetActive(false);
+
         base.Start();
         InteractableType = InteractionManager.Instance.StationInteractableType;
         ToggleSabotagedVisuals();
@@ -85,7 +87,6 @@ public class Station : Interactable
             currentValue = Mathf.Lerp(0.0f, 1.0f, currentFeedbackTime / TimeToUse);
             slider.value = currentValue;
             currentFeedbackTime += Time.deltaTime;
-            time += Time.deltaTime;
         }
     }
 
