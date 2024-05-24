@@ -32,7 +32,7 @@ public class InteractionComponent : MonoBehaviour
                 float tempDistance = Vector3.Distance(pos, position);
 
                 if (tempDistance < distance)
-                {
+                { 
                     distance = tempDistance;
 
                     if (distance < interactable.GetInteractionRadius())
