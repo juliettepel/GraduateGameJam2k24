@@ -62,6 +62,7 @@ public class InteractionComponent : MonoBehaviour
         if(_canInteract)
         {
             //Interact here when a button is pressed
+            bestTarget.Inte
             Debug.Log("[Interaction Component] - Interact");
         }
     }

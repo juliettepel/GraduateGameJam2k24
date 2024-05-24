@@ -12,11 +12,11 @@ public class Station : Interactable
 
     public bool InUse { get; set; } = false;
 
-    public StationEvent stationEvent;
+    public UsedStationEvent usedStationEvent;
 
     public override void Start()
     {
-        stationEvent.AddListener(OnMyCoroutineEnded);
+        usedStationEvent.AddListener(OnStationUseDone);
 
         base.Start();
         InteractableType = InteractionManager.Instance.StationInteractableType;
@@ -36,7 +36,13 @@ public class Station : Interactable
     {
         currentNPC = npc;
         InUse = true;
-        StartCoroutine(npc.UseStation(this, TimeToUse, stationEvent));
+        StartCoroutine(npc.UseStation(this, TimeToUse, usedStationEvent));
+    }
+
+    public override void OnInteract()
+    {
+        IsSabotaged = true;
+        SabotageController.Instance.AddSabotaged(this);
     }
 
     public override bool IsValidObjective()
@@ -44,7 +50,7 @@ public class Station : Interactable
         return !IsCurrentlyAnObjective && !InUse;
     }
 
-    private void OnMyCoroutineEnded(NPC npc)
+    private void OnStationUseDone(NPC npc)
     {
         InUse = false;
         npc.CurrentObjective = null;
