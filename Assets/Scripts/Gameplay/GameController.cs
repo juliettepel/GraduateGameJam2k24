@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class GameController : Singleton<GameController>
 {
@@ -10,9 +11,14 @@ public class GameController : Singleton<GameController>
     public bool TimerOn = false;
     public TMP_Text TimerText;
 
+    public ServingStation ServingStation;
+    public Slider TeleportStationCooldown;
+
     public int OrdersRequired;
     public TMP_Text OrderText;
     public int OrdersServed { get; set; } = 0;
+
+    public SabotageCooldownDoneEvent sabotageCooldownDoneEvent;
 
     public Transform[] servingStationLocations;
 
@@ -48,6 +54,8 @@ public class GameController : Singleton<GameController>
             updateTimer(TimeLeft);
             updateOrders();
         }
+
+        TeleportStationCooldown.value = ServingStation.currentSliderValue;
     }
 
     void updateTimer(float currentTime)
