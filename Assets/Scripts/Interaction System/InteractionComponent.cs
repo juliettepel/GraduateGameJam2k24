@@ -20,7 +20,13 @@ public class InteractionComponent : MonoBehaviour
 
         foreach (Interactable interactable in InteractionManager.Instance.m_Interactables)
         {
-            if(interactable != null)
+            //Super hacky check but I dont wanna spend time redoing the "interactable" hierarchy structures.
+            //Both the players and the NPCs use the interactable list
+            //But when the player walks up to the fridge we want them to sabotage the fridge and not interact with the ingredient (which would do nothing)
+            //So tada
+            bool isIngredient = interactable.InteractableType.Equals(InteractionManager.Instance.IngredientInteractableType);
+
+            if (interactable != null && !isIngredient)
             {
                 Vector3 pos = interactable.transform.position;
                 float tempDistance = Vector3.Distance(pos, position);
@@ -28,8 +34,10 @@ public class InteractionComponent : MonoBehaviour
                 if (tempDistance < distance)
                 {
                     distance = tempDistance;
+
                     if (distance < interactable.GetInteractionRadius())
                     {
+
                         interactable.OnInteractionAvailable();
                         _canInteract = true;
                         bestTarget = interactable;

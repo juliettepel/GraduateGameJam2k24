@@ -13,6 +13,9 @@ public class Station : Interactable
     float currentValue;
     public NPC CurrentNPC;
 
+    public GameObject IntactState;
+    public GameObject SabotagedState;
+
     public bool InUse { get; set; } = false;
 
     public UsedStationEvent usedStationEvent;
@@ -74,12 +77,6 @@ public class Station : Interactable
         ToggleSabotagedVisuals();
     }
 
-    public override void OnInteract()
-    {
-        base.OnInteract();
-        ToggleSabotagedVisuals();
-    }
-
     private void UpdateFeedback()
     {
         float time = 0;
@@ -92,15 +89,20 @@ public class Station : Interactable
 
     }
 
+    public override void OnInteract()
+    {
+        base.OnInteract();
+        ToggleSabotagedVisuals();
+    }
+
     private void HideFeedback()
     {
 
     }
 
-    private void ToggleSabotagedVisuals()
+    public void ToggleSabotagedVisuals()
     {
         SabotagedState.SetActive(IsSabotaged);
         IntactState.SetActive(!IsSabotaged);
     }
-
 }
