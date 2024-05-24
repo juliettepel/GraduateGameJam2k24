@@ -191,10 +191,12 @@ public class NPC : MonoBehaviour
         CurrentStation = null;
     }
 
-    public IEnumerator UseStation(Station station, float seconds)
+    public IEnumerator UseStation(Station station, float seconds, StationEvent stationEvent)
     {
         CurrentStation = station;
         yield return new WaitForSeconds(seconds);
+
+        stationEvent.Invoke(CurrentStation.currentNPC);
 
         OnStationUsed(station);
     }
