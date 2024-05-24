@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class IngredientSpawner : Interactable
 {
@@ -15,6 +16,10 @@ public class IngredientSpawner : Interactable
 
     public float SabotatedTimer = 4.0f;
     public float TimeUntilNewIngredient = 4.0f;
+    public float currentFeedbackTime = 0.0f;
+    public float currentValue = 0.0f;
+
+    public Slider slider;
 
     public bool CanSpawnIngredient = true;
 
@@ -29,6 +34,15 @@ public class IngredientSpawner : Interactable
     // Update is called once per frame
     void Update()
     {
+        if(!CanSpawnIngredient)
+        {
+            if (currentFeedbackTime < TimeUntilNewIngredient)
+            {
+                currentValue = Mathf.Lerp(0.0f, 1.0f, currentFeedbackTime / TimeUntilNewIngredient);
+                slider.value = currentValue;
+                currentFeedbackTime += Time.deltaTime;
+            }
+        }
         if(_currentIngredient == null && !IsSabotaged && CanSpawnIngredient)
         {
             SpawnIngredient();
@@ -72,6 +86,8 @@ public class IngredientSpawner : Interactable
     private void OnNewIngredientCountdownFinished()
     {
         CanSpawnIngredient = true;
+        currentFeedbackTime = 0;
+        slider.value = 0;
     }
     private void OnSabotagedCountdownFinished()
     {

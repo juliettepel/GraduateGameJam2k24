@@ -67,9 +67,8 @@ public class NPC : MonoBehaviour
         if (CurrentObjective != null)
         {
             Debug.LogFormat("{0} chose objective {1}", gameObject.name, CurrentObjective.gameObject.name);
+            CurrentObjective.IsCurrentlyAnObjective = true;
         }
-
-        CurrentObjective.IsCurrentlyAnObjective = true;
     }
 
     //For now just use the nearest, if we have time we could choose it based on which recipe goes next.
