@@ -13,6 +13,7 @@ public class Interactable : MonoBehaviour
     public Transform InteractPosition;
 
     public bool IsCurrentlyAnObjective { get; set; } = false;
+    public bool IsSabotaged { set; get; } = false;
 
 
     public float GetInteractionRadius()
@@ -60,6 +61,8 @@ public class Interactable : MonoBehaviour
             meshRenderer.material.color = c;
         }
     }
+
+    public virtual void OnInteract() { }
 
     public virtual void OnReached(NPC npc) 
     {
