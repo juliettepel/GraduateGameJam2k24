@@ -46,8 +46,6 @@ public class Station : Interactable
     public override void OnReached(NPC npc)
     {
         CurrentNPC = npc;
-        InUse = true;
-        slider.gameObject.SetActive(true);
 
         if (IsSabotaged)
         {
@@ -55,6 +53,8 @@ public class Station : Interactable
         }
         else 
         {
+            InUse = true;
+            slider.gameObject.SetActive(true);
             StartCoroutine(npc.UseStation(this, TimeToUse, usedStationEvent));
         }
     }
@@ -76,6 +76,8 @@ public class Station : Interactable
     {
         IsCurrentlyAnObjective = false;
         IsSabotaged = false;
+
+        slider.gameObject.SetActive(true);
 
         ToggleSabotagedVisuals();
     }
