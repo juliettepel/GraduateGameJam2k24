@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,9 +10,9 @@ public class Station : Interactable
     public IngredientStage StartIngredientStage;
     public IngredientStage EndIngredientStage;
     public NPC currentNPC;
+    float currentValue;
 
     public bool InUse { get; set; } = false;
-
     public StationEvent stationEvent;
 
     public override void Start()
@@ -54,6 +55,13 @@ public class Station : Interactable
 
     private void UpdateFeedback()
     {
+        float time = 0;
+        while (time < TimeToUse)
+        {
+            currentValue = Mathf.Lerp(0, 1, time / TimeToUse);
+            Debug.Log("LERP" + currentValue);
+            time += Time.deltaTime;
+        }
 
     }
 
