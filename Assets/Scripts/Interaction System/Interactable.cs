@@ -56,18 +56,22 @@ public class Interactable : MonoBehaviour
         {
             cubeRenderer.material.color = _defaultColor;
         }
+        if (InteractPrompt != null)
+        {
+            InteractPrompt.gameObject.SetActive(false);
+        }
     }
 
     public void OnInteractionAvailable()
     {
         //Display a feedback here
         Debug.Log("[Interactable] - OnInteraction");
-        if (InteractPrompt != null)
-        {
-            InteractPrompt.gameObject.SetActive(true);
-        }
         if (!IsSabotaged)
         {
+            if (InteractPrompt != null)
+            {
+                InteractPrompt.gameObject.SetActive(true);
+            }
             MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
             if (meshRenderer)
             {
