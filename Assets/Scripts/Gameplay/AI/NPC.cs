@@ -1,6 +1,8 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 public class NPC : MonoBehaviour
 {
@@ -12,12 +14,33 @@ public class NPC : MonoBehaviour
     public Station CurrentStation;
     public Interactable CurrentObjective { get; set; } = null;
 
+    public AudioSource OrderServedAudio;
+    private AudioSource _orderServedAudio;
+
+    public AudioSource RepairNeededNoticedAudio;
+    private AudioSource _repairNeededNoticedAudio;
+
+    private bool _hasPlayedRepairNeededAudio = false;
+
+    private bool _isRepairingStation = false;
+    private float _totalTimeToRepairStation = 0.0f;
+    private float _currentRepairTime = 0.0f;
+    public UnityEngine.UI.Slider fixingStationSlider;
+
     // Start is called before the first frame update
     void Start()
     {
         _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
 
         _inventory = gameObject.GetComponent<Inventory>();
+
+        _orderServedAudio = Instantiate(OrderServedAudio);
+        _repairNeededNoticedAudio = Instantiate(RepairNeededNoticedAudio);
+
+        _isRepairingStation = false;
+        _totalTimeToRepairStation = 0.0f;
+        _currentRepairTime = 0.0f;
+        fixingStationSlider.gameObject.SetActive(false);
     }
 
 
@@ -40,7 +63,10 @@ public class NPC : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        if (_isRepairingStation)
+        {
+            RepairStationFeedback();
+        }
     }
 
     public void ChooseObjective() 
@@ -194,6 +220,11 @@ public class NPC : MonoBehaviour
     void OnStationRepaired(Station station)
     {
         StartCoroutine(UseStation(station, station.TimeToUse, station.usedStationEvent));
+        _hasPlayedRepairNeededAudio = false;
+        _isRepairingStation = false;
+        _totalTimeToRepairStation = 0.0f;
+        _currentRepairTime = 0.0f;
+        fixingStationSlider.gameObject.SetActive(false);
     }
 
     public IEnumerator UseStation(Station station, float seconds, UsedStationEvent usedStationEvent)
@@ -210,6 +241,15 @@ public class NPC : MonoBehaviour
     public IEnumerator RepairStation(Station station, float seconds, RepairedStationEvent repairedStationEvent)
     {
         CurrentStation = station;
+        if (!_hasPlayedRepairNeededAudio)
+        {
+            _repairNeededNoticedAudio.Play();
+            _hasPlayedRepairNeededAudio = true;
+        }
+        _totalTimeToRepairStation = seconds;
+        _isRepairingStation = true;
+        fixingStationSlider.gameObject.SetActive(true);
+
         yield return new WaitForSeconds(seconds);
 
         repairedStationEvent.Invoke(CurrentStation.CurrentNPC);
@@ -225,12 +265,17 @@ public class NPC : MonoBehaviour
         _inventory.CurrentIngredient = null;
 
         GameController.Instance.OrdersServed++;
+
+        _orderServedAudio.Play();
     }
 
-    //todo - pretty sure I didnt implement this properly
-    private IEnumerator Countdown(float duration)
+    public void RepairStationFeedback()
     {
-        yield return new WaitForSeconds(duration);
-        Debug.Log("USING STATION TIMER!");
+        if (_currentRepairTime < _totalTimeToRepairStation)
+        {
+            float currentSliderValue = Mathf.Lerp(0.0f, 1.0f, _currentRepairTime / _totalTimeToRepairStation);
+            fixingStationSlider.value = currentSliderValue;
+            _currentRepairTime += Time.deltaTime;
+        }
     }
 }

@@ -22,10 +22,13 @@ public class GameController : Singleton<GameController>
 
     public Transform[] servingStationLocations;
 
+    public AudioSource BackgroundAudio;
+
     // Start is called before the first frame update
     void Start()
     {
         TimerOn = true;
+        BackgroundAudio.Play();
     }
 
     // Update is called once per frame

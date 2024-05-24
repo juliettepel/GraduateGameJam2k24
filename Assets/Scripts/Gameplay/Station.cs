@@ -22,6 +22,11 @@ public class Station : Interactable
     public UsedStationEvent usedStationEvent;
     public RepairedStationEvent repairedStationEvent;
 
+    public AudioSource SabotageAudio;
+    private AudioSource _sabotageAudio;
+    public AudioSource FixedAudio;
+    private AudioSource _fixedAudio;
+
     public override void Start()
     {
         usedStationEvent.AddListener(OnStationUseDone);
@@ -32,6 +37,9 @@ public class Station : Interactable
         base.Start();
         InteractableType = InteractionManager.Instance.StationInteractableType;
         ToggleSabotagedVisuals();
+
+        _sabotageAudio = Instantiate(SabotageAudio);
+        _fixedAudio = Instantiate(FixedAudio);
     }
 
     // Update is called once per frame
@@ -79,6 +87,8 @@ public class Station : Interactable
         slider.gameObject.SetActive(true);
 
         ToggleSabotagedVisuals();
+
+        _fixedAudio.Play();
     }
 
     private void UpdateFeedback()
@@ -95,6 +105,8 @@ public class Station : Interactable
     {
         base.OnInteract();
         ToggleSabotagedVisuals();
+
+        _sabotageAudio.Play(); 
     }
 
     private void HideFeedback()
