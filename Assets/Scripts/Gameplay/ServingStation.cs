@@ -6,6 +6,10 @@ using UnityEngine;
 //Count maybe put some order/sabotage/points logic here ?
 public class ServingStation : Interactable
 {
+    public bool CanBeSabotaged { get; set; } = true;
+    public float SabotageCooldown = 4;
+    public float currentSliderValue;
+    float currentTimerValue = 0;
 
     // Start is called before the first frame update
     public override void Start()
@@ -18,7 +22,19 @@ public class ServingStation : Interactable
     // Update is called once per frame
     void Update()
     {
-        
+        if(IsSabotaged)
+        {
+            UpdateFeedback();
+        }
+    }
+
+    private void UpdateFeedback()
+    {
+        if (currentTimerValue < SabotageCooldown)
+        {
+            currentSliderValue = Mathf.Lerp(0.0f, 1.0f, currentTimerValue / SabotageCooldown);
+            currentTimerValue += Time.deltaTime;
+        }
     }
 
     public override void OnReached(NPC npc)
@@ -31,8 +47,31 @@ public class ServingStation : Interactable
     {
         base.OnInteract();
 
-        System.Random random = new System.Random();
-        int randomIndex = random.Next(0, GameController.Instance.servingStationLocations.Length);
-        gameObject.transform.position = GameController.Instance.servingStationLocations[randomIndex].position;
+        if(CanBeSabotaged)
+        {
+
+            System.Random random = new System.Random();
+            int randomIndex = random.Next(0, GameController.Instance.servingStationLocations.Length);
+            gameObject.transform.position = GameController.Instance.servingStationLocations[randomIndex].position;
+
+            OnSabotaged();
+        }
+    }
+
+    private void OnSabotaged()
+    {
+        CanBeSabotaged = false;
+        IsSabotaged = true;
+        StartCoroutine(StartSabotageCooldown());
+    }
+
+    public IEnumerator StartSabotageCooldown()
+    {
+        CanBeSabotaged = false;
+        yield return new WaitForSeconds(SabotageCooldown);
+
+        CanBeSabotaged = true;
+        IsSabotaged = false;
+        currentTimerValue = 0;
     }
 }
