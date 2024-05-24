@@ -56,6 +56,11 @@ public class GameController : Singleton<GameController>
         updateOrders();
 
         TeleportStationCooldown.value = ServingStation.currentSliderValue;
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
     }
 
     void updateTimer(float currentTime)
