@@ -11,6 +11,7 @@ public class Interactable : MonoBehaviour
     protected Color _targetColor;
 
     public Transform InteractPosition;
+    public GameObject InteractPrompt;
 
     public bool IsCurrentlyAnObjective { get; set; } = false;
     public bool IsSabotaged = false;
@@ -25,6 +26,8 @@ public class Interactable : MonoBehaviour
     public virtual void Start()
     {
         InteractionManager.Instance.AddInteractable(this);
+
+        InteractPrompt.gameObject.SetActive(false);
 
         MeshRenderer cubeRenderer = GetComponent<MeshRenderer>();
         if(cubeRenderer)
@@ -56,8 +59,9 @@ public class Interactable : MonoBehaviour
     {
         //Display a feedback here
         Debug.Log("[Interactable] - OnInteraction");
+        InteractPrompt.gameObject.SetActive(true);
 
-        if(!IsSabotaged)
+        if (!IsSabotaged)
         {
             MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
             if (meshRenderer)
