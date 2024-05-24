@@ -1,11 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Xml.Linq;
-using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Assertions;
 
 public class NPC : MonoBehaviour
 {
