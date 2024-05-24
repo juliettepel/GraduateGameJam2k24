@@ -1565,11 +1565,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duplicationHandling: 1
   DoNotDestroyOnLoad: 1
-  TimeLeft: 0
-  TimerOn: 0
-  TimerText: {fileID: 0}
+  TimeLeft: 30
+  TimerOn: 1
+  TimerText: {fileID: 671103544}
   OrdersRequired: 0
-  OrderText: {fileID: 0}
+  OrderText: {fileID: 1416453926}
 --- !u!4 &1465776478
 Transform:
   m_ObjectHideFlags: 0
