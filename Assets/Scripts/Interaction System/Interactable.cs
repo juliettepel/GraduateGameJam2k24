@@ -10,6 +10,8 @@ public class Interactable : MonoBehaviour
     Color defaultColor;
     Color targetColor;
 
+    public Transform InteractPosition;
+
     public bool IsCurrentlyAnObjective { get; set; } = false;
 
 
