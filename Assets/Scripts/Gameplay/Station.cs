@@ -53,7 +53,6 @@ public class Station : Interactable
         }
         else 
         {
-            InUse = true;
             slider.gameObject.SetActive(true);
             StartCoroutine(npc.UseStation(this, TimeToUse, usedStationEvent));
         }
@@ -76,7 +75,7 @@ public class Station : Interactable
     {
         IsCurrentlyAnObjective = false;
         IsSabotaged = false;
-
+        InUse = true;
         slider.gameObject.SetActive(true);
 
         ToggleSabotagedVisuals();
