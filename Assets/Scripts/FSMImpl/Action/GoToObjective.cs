@@ -12,9 +12,19 @@ public class GoToObjectiveAction : FSMAction
         NPC npc = stateMachine.GetComponent<NPC>();
 
         npc.ChooseObjective();
-        navMeshAgent.SetDestination(npc.CurrentObjective.transform.position);
+        Interactable currentObjective = npc.CurrentObjective;
+        Transform interactPosition = currentObjective.InteractPosition;
 
-        if(npc.HasReached(navMeshAgent)) 
+        if (interactPosition != null) 
+        {
+            navMeshAgent.SetDestination(interactPosition.position);
+        }
+        else
+        {
+            navMeshAgent.SetDestination(npc.CurrentObjective.transform.position);
+        }
+
+        if (npc.HasReached(navMeshAgent)) 
         {
             npc.CurrentObjective.OnReached(npc);
         }
