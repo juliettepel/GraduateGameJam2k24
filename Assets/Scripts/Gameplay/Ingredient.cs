@@ -16,6 +16,8 @@ public class Ingredient : Interactable
 
     private GameObject _owner;
 
+    public IngredientSpawner Spawner { get; set; }
+
     public bool IsReadyToServe = false;
 
     // Start is called before the first frame update
@@ -101,6 +103,7 @@ public class Ingredient : Interactable
         npc.PickupIngredient(this);
         npc.CurrentObjective = null;
         IsCurrentlyAnObjective = false;
+        Spawner.OnIngredientPickedUp();
     }
 
     public override bool IsValidObjective()
