@@ -80,5 +80,11 @@ public class GameController : Singleton<GameController>
     {
         _currentTimeLeft = TotalTimeLeft;
         OrdersServed = 0;
+
+        // Destroy everything in the scene
+        foreach (GameObject o in Object.FindObjectsOfType<GameObject>())
+        {
+            Destroy(o);
+        }
     }
 }
