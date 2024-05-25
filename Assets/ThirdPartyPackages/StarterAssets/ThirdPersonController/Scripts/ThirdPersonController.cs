@@ -125,7 +125,7 @@ namespace StarterAssets
 
         // Use to set initial position to spawn point
         public Vector3 InitialPosition;
-        private bool _isInitialPositionSet = false;
+        public bool _isInitialPositionSet = false;
 
 
         private void Awake()

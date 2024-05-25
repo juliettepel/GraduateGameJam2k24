@@ -15,6 +15,7 @@ public class CameraManager : MonoBehaviour
     public void OnPlayerJoin(PlayerInput input)
     {
         ThirdPersonController playerController = input.GetComponent<ThirdPersonController>();
+        playerController._isInitialPositionSet = false;
         playerController.InitialPosition = PlayerSpawnPoints[_currentPlayerCount].position;
 
         _currentPlayerCount++;
