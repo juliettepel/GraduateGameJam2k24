@@ -11,11 +11,19 @@ public class ServingStation : Interactable
     public float currentSliderValue;
     float currentTimerValue = 0;
 
+    public AudioSource SabotageAudio;
+    private AudioSource _sabotageAudio;
+    public AudioSource FixedAudio;
+    private AudioSource _fixedAudio;
+
     // Start is called before the first frame update
     public override void Start()
     {
         base.Start();
         InteractableType = InteractionManager.Instance.ServingStationInteractableType;
+
+        _sabotageAudio = Instantiate(SabotageAudio);
+        _fixedAudio = Instantiate(FixedAudio);
     }
 
 
@@ -49,7 +57,6 @@ public class ServingStation : Interactable
 
         if(CanBeSabotaged)
         {
-
             System.Random random = new System.Random();
             int randomIndex = random.Next(0, GameController.Instance.servingStationLocations.Length);
             gameObject.transform.position = GameController.Instance.servingStationLocations[randomIndex].position;
@@ -68,10 +75,12 @@ public class ServingStation : Interactable
     public IEnumerator StartSabotageCooldown()
     {
         CanBeSabotaged = false;
+        _sabotageAudio.Play();
         yield return new WaitForSeconds(SabotageCooldown);
 
         CanBeSabotaged = true;
         IsSabotaged = false;
         currentTimerValue = 0;
+        _fixedAudio.Play();
     }
 }

@@ -123,6 +123,10 @@ namespace StarterAssets
             }
         }
 
+        // Use to set initial position to spawn point
+        public Vector3 InitialPosition;
+        private bool _isInitialPositionSet = false;
+
 
         private void Awake()
         {
@@ -176,6 +180,15 @@ namespace StarterAssets
         private void LateUpdate()
         {
             CameraRotation();
+            if (!_isInitialPositionSet)
+            {
+                if (InitialPosition == null)
+                {
+                    InitialPosition = Vector3.zero;
+                }
+                transform.position = InitialPosition;
+                _isInitialPositionSet = true;
+            }
         }
 
         private void AssignAnimationIDs()

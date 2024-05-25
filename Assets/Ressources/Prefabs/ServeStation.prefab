@@ -153,3 +153,7 @@ MonoBehaviour:
   m_InteractionRadius: 2
   InteractPosition: {fileID: 5973161386406487432}
   IsSabotaged: 0
+  SabotageCooldown: 4
+  currentSliderValue: 0
+  SabotageAudio: {fileID: 4775317118586257917, guid: 3a206dc40002f874bb6569ce8a035a5a, type: 3}
+  FixedAudio: {fileID: 2964247884254404655, guid: 2a12353fc224bef4691a34265b0bc5d8, type: 3}
